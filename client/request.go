@@ -28,20 +28,14 @@ func NewRequestHandler(addr string) *RequestHandler {
 }
 
 func (r RequestHandler) ChromeShow() (err error) {
-	res, err := http.Get(r.localAdd + "/chromeshow")
-	if err != nil {
-		return
-	}
-	var b = new(bytes.Buffer)
-	io.Copy(b, res.Body)
-	fmt.Println(b)
-	fmt.Println(r.localAdd + "/chromeshow")
+	_, err = http.Get(r.localAdd + "/chromeshow")
+
 	return
 
 }
 
 func (r RequestHandler) ChromeOff() (err error) {
-	http.Get(r.localAdd + "/chromeoff")
+	_, err = http.Get(r.localAdd + "/chromeoff")
 	return
 }
 
