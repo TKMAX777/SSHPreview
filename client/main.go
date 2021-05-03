@@ -17,7 +17,7 @@ func main() {
 	flag.Parse()
 	var args = flag.Args()
 
-	var req = NewRequestHandler("http://127.0.0.1:" + Settings.ListenPort)
+	var req = NewRequestHandler("http://localhost:" + Settings.ListenPort)
 
 	interrupt := make(chan os.Signal, 1)
 
