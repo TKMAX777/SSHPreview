@@ -7,6 +7,7 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"net/url"
 )
 
 type RequestHandler struct {
@@ -70,7 +71,7 @@ func (r *RequestHandler) Send(data HTTPPreviewData) (err error) {
 }
 
 func (r *RequestHandler) Verify(fileName string) (err error) {
-	resp, err := r.client.Get(r.localAdd + "/verify?name=" + fileName)
+	resp, err := r.client.Get(r.localAdd + "/verify?name=" + url.QueryEscape(fileName))
 	if err != nil {
 		return
 	}
