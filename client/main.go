@@ -5,7 +5,9 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
 	"path/filepath"
+	"syscall"
 	"time"
 )
 
@@ -21,6 +23,7 @@ func main() {
 	var req = NewRequestHandler("http://localhost:" + Settings.ListenPort)
 
 	interrupt := make(chan os.Signal, 1)
+	signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
 
 	enter := make(chan bool, 1)
 
