@@ -39,12 +39,12 @@ func main() {
 
 	err := req.ChromeShow()
 	if err != nil {
-		fmt.Printf("Chrome excute error:\n%s", err.Error())
+		fmt.Printf("Chrome excute error:\n%s\n", err.Error())
 		return
 	}
 
 	for _, p := range args {
-		fmt.Println(p)
+		fmt.Printf(p)
 
 		err = req.Verify(filepath.Base(p))
 		if err != nil {
