@@ -1,4 +1,4 @@
-# SSH Preview (Client)
+# SSH Preview (Server)
 ## 概要
 このプログラムはSSHの接続元に配置するプログラムです。このプログラムはClientからのリクエストを受けとり、Chromeを立ち上げ、プレビューを転送します。
 
