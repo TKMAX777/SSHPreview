@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strings"
 	"syscall"
 	"time"
 )
@@ -25,12 +26,20 @@ func main() {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
 
-	enter := make(chan bool, 1)
+	var enter = make(chan bool, 1)
+	var back = make(chan bool)
 
 	go func() {
 		for {
-			bufio.NewScanner(os.Stdin).Scan()
-			enter <- true
+			var scanner = bufio.NewScanner(os.Stdin)
+			scanner.Scan()
+
+			switch strings.TrimSpace(scanner.Text()) {
+			case "back", "b":
+				back <- true
+			default:
+				enter <- true
+			}
 		}
 	}()
 
@@ -43,12 +52,13 @@ func main() {
 		return
 	}
 
-	for _, p := range args {
-		fmt.Printf(p)
+	for i := 0; i < len(args); i++ {
+		var p = args[i]
+
+		fmt.Println(p)
 
 		err = req.Verify(filepath.Base(p))
 		if err != nil {
-			fmt.Println()
 			fmt.Println(err.Error())
 			goto wait
 		}
@@ -73,6 +83,11 @@ func main() {
 				req.ChromeOff()
 				goto end
 			case <-enter:
+				break wait
+			case <-back:
+				if i > 1 {
+					i -= 2
+				}
 				break wait
 			case <-ticker.C:
 			}
