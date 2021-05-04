@@ -48,6 +48,7 @@ func main() {
 
 		err = req.Verify(filepath.Base(p))
 		if err != nil {
+			fmt.Println()
 			fmt.Println(err.Error())
 			goto wait
 		}
@@ -70,13 +71,15 @@ func main() {
 			select {
 			case <-interrupt:
 				req.ChromeOff()
-				os.Exit(1)
+				goto end
 			case <-enter:
 				break wait
 			case <-ticker.C:
 			}
 		}
 	}
+end:
 	req.ChromeOff()
+	fmt.Println()
 
 }
