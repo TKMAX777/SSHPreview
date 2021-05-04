@@ -9,7 +9,7 @@ type HTTPHandler struct {
 
 func NewHTTPHandler() *HTTPHandler {
 	var h HTTPHandler
-	var preview = make(chan HTTPPreviewData, 2)
+	var preview = make(chan HTTPPreviewData)
 	var message = make(chan string)
 
 	var chrome = NewHTTPChromeHandler()
