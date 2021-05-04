@@ -44,6 +44,7 @@ func main() {
 
 		err := req.Verify(filepath.Base(p))
 		if err != nil {
+			fmt.Println(err.Error())
 			goto wait
 		}
 
