@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -36,10 +37,16 @@ func main() {
 	req.ChromeShow()
 
 	for _, p := range args {
+		err := req.Verify(filepath.Base(p))
+		if err != nil {
+			continue
+		}
+
 		f, err := os.Open(p)
 		if err != nil {
 			continue
 		}
+
 		fmt.Println(p)
 		req.Send(HTTPPreviewData{
 			Data:     f,

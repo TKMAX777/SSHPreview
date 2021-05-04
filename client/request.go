@@ -68,3 +68,14 @@ func (r *RequestHandler) Send(data HTTPPreviewData) (err error) {
 
 	return
 }
+
+func (r *RequestHandler) Verify(fileName string) (err error) {
+	resp, err := r.client.Get(r.localAdd + "/verify?name=" + fileName)
+	if err != nil {
+		return
+	}
+	if resp.StatusCode != 200 {
+		return fmt.Errorf("Invalid")
+	}
+	return
+}
