@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"io"
 	"net/http"
 	"path/filepath"
@@ -44,7 +45,8 @@ func (h *HTTPRemoteRequest) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	io.Copy(data, file)
 
 	go func() {
-		h.message <- header.Filename
+		b, _ := json.Marshal(HTTPResponseFormat{Status: "OK", Content: struct{ FileName string }{header.Filename}})
+		h.message <- string(b)
 	}()
 
 	go func() {

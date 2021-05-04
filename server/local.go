@@ -33,13 +33,14 @@ var upgrader = websocket.Upgrader{
 }
 
 type HTTPFileNameSender struct {
-	conn *websocket.Conn
-	send chan string
+	conn          *websocket.Conn
+	send          chan string
+	hasConnection bool
 }
 
 // FileNameSender websocket connection on local machine
 func NewFileNameSender(message chan string) *HTTPFileNameSender {
-	return &HTTPFileNameSender{nil, message}
+	return &HTTPFileNameSender{nil, message, false}
 }
 
 func (h *HTTPFileNameSender) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -47,6 +48,12 @@ func (h *HTTPFileNameSender) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(403)
 		fmt.Fprintf(w, "Forbidden")
 		return
+	}
+
+	if h.hasConnection {
+		h.conn.WriteJSON(HTTPResponseFormat{Status: "GetNewConnection"})
+		h.conn.Close()
+		h.hasConnection = false
 	}
 
 	conn, err := upgrader.Upgrade(w, r, nil)
@@ -62,6 +69,7 @@ func (h *HTTPFileNameSender) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	conn.SetReadDeadline(time.Now().Add(pongWait))
 	conn.SetPongHandler(func(string) error { conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 
+	h.hasConnection = true
 	h.conn = conn
 
 	go h.sendMessage()

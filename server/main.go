@@ -7,8 +7,6 @@ import (
 	"path/filepath"
 )
 
-const SettingFileName = "settings.json"
-
 func init() {
 	Settings.ListenPort = os.Getenv("PreviewListenPort")
 	if Settings.ListenPort == "" {

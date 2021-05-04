@@ -144,8 +144,23 @@
             }
 
             conn.onmessage = async(evt) => {
-                let fileName = String(evt.data)
-                console.log(fileName);
+                let data = await JSON.parse(evt.data)
+
+                if (!data.Status) {
+                    return
+                }
+
+                if (data.Status == "GetNewConnection") {
+                    const preview = document.querySelector("#preview");
+                    preview.textContent = "新たな接続により、このセッションは切断されました。";
+                    return;
+                }
+
+                if (!data.Content && !data.Content.FileName) {
+                    return;
+                }
+
+                let fileName = data.Content.FileName;
 
                 const res = await fetch("http://" + localAddress + "/file")
                 const objURI = await URL.createObjectURL(await res.blob())
