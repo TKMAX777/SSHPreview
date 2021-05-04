@@ -40,24 +40,26 @@ func main() {
 	req.ChromeShow()
 
 	for _, p := range args {
+		fmt.Println(p)
+
 		err := req.Verify(filepath.Base(p))
 		if err != nil {
-			continue
+			goto wait
 		}
 
-		f, err := os.Open(p)
-		if err != nil {
-			continue
+		{
+			f, err := os.Open(p)
+			if err != nil {
+				continue
+			}
+
+			req.Send(HTTPPreviewData{
+				Data:     f,
+				FileName: f.Name(),
+			})
+
+			f.Close()
 		}
-
-		fmt.Println(p)
-		req.Send(HTTPPreviewData{
-			Data:     f,
-			FileName: f.Name(),
-		})
-
-		f.Close()
-
 	wait:
 		for {
 			select {
