@@ -37,12 +37,16 @@ func main() {
 	ticker := time.NewTicker(time.Second)
 	defer ticker.Stop()
 
-	req.ChromeShow()
+	err := req.ChromeShow()
+	if err != nil {
+		fmt.Printf("Chrome excute error:\n%s", err.Error())
+		return
+	}
 
 	for _, p := range args {
 		fmt.Println(p)
 
-		err := req.Verify(filepath.Base(p))
+		err = req.Verify(filepath.Base(p))
 		if err != nil {
 			fmt.Println(err.Error())
 			goto wait
