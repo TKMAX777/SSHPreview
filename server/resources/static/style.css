@@ -1,0 +1,34 @@
+#main {
+    transition: all 500ms 0s ease;
+}
+
+#main div.card-body>div {
+    height: 100%;
+    overflow: scroll;
+}
+
+#main div.card-body div {
+    transition: all 500ms 0s ease;
+}
+
+#main .card-body {
+    padding-right: 0%;
+}
+
+.fill {
+    height: 100%;
+    width: 100%;
+}
+
+.viewer.text {
+    line-height: 100%
+}
+
+img {
+    transform-origin: center top;
+    transition: all 500ms 0s ease;
+    margin: 0 auto;
+    max-height: 80%;
+    max-width: 100%;
+    display: inherit;
+}

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<title>SSH Imager</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/b60b76d4e7.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+
+    <div class="main" id="main" style=" height:89%;">
+        <div class="card-header"><span id="title"></span> </div>
+        <div class="card-body" style="height: 100%;">
+            <i id="init_preview" class="fas fa-sync-alt"></i>
+            <div>
+                <div id="preview" class="fill">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        const localAddress = "{{$ADDRESS}}";
+
+        window.addEventListener("resize", (evt) => {
+            Preview.init_preview();
+        })
+
+        window.onload = () => {
+            document.querySelector("#init_preview").addEventListener("click", () => {
+                Preview.init_preview();
+            })
+        }
+
+        const adjust_below = (elem) => {
+            elem.style.height = document.documentElement.clientHeight - elem.getBoundingClientRect().y + "px";
+        }
+
+        const Preview = {};
+        Preview.init_preview = () => {
+            Preview.scale = 1;
+            Preview.max = 5;
+
+            let preview_img = document.querySelector("img");
+
+            preview_img.style.margin = "0 auto";
+            preview_img.parentElement.style.paddingLeft = `0px`;
+            preview_img.style.transform = `scale(${Preview.scale})`;
+
+            preview_img.addEventListener("wheel", (event) => {
+                event.preventDefault();
+                Preview.scale += event.deltaY * -0.005;
+                // Restrict scale
+                Preview.scale = Math.min(Math.max(0.8, Preview.scale), 5);
+                // Apply scale transform
+                preview_img.style.transform = `scale(${Preview.scale})`;
+
+                if (preview_img.getBoundingClientRect().x < 0 &&
+                    Preview.max > Preview.scale) {
+                    Preview.max = Preview.scale;
+                }
+
+                if (Preview.scale > Preview.max) {
+                    preview_img.style.margin = "0 0";
+                    preview_img.style.transformOrigin = "left top"
+                    return
+                }
+
+                preview_img.style.transformOrigin = "center top"
+                preview_img.style.margin = "0 auto";
+
+                return
+
+            })
+
+
+            adjust_below(document.querySelector("#main"))
+            adjust_below(document.querySelector("body"))
+
+            adjust_below(document.querySelector("#main .card-body > div"));
+            return;
+        }
+
+        const dataType = (fileName) => {
+            const index = fileName.lastIndexOf(".")
+            if (index < 0) {
+                return ["", undefined]
+            }
+
+            if (fileName.length <= index + 1) {
+                return ["", undefined]
+            }
+
+            const extension = fileName.substr(index + 1)
+
+            switch (extension) {
+                case "jpg":
+                case "jpeg":
+                case "png":
+                case "gif":
+                    return ["image", extension]
+                case "wav":
+                case "aac":
+                case "mp3":
+                case "m4a":
+                    return ["audio", extension]
+                default:
+                    return [undefined, extension]
+            }
+        }
+
+        const refleshPreview = (lastType, nextType) => {
+            if (lastType === nextType) {
+                return
+            }
+            const preview = document.querySelector("#preview");
+            preview.innerHTML = "";
+
+            switch (nextType) {
+                case "image":
+                    const img = document.createElement("img")
+                    img.id = "img_frame"
+                    preview.appendChild(img);
+                    Preview.init_preview();
+                    return
+                case "audio":
+                    const audio = document.createElement("audio")
+                    audio.id = "audio_frame"
+                    audio.controls = "controls";
+                    preview.appendChild(audio);
+            }
+            return;
+        }
+
+        (() => {
+            let conn = new WebSocket("ws://" + localAddress + "/local");
+            let lastType = "";
+
+            conn.onclose = function(evt) {
+                document.querySelector("#title").textContent = 'Connection closed';
+            }
+
+            conn.onmessage = async(evt) => {
+                let fileName = String(evt.data)
+                console.log(fileName);
+
+                const res = await fetch("http://" + localAddress + "/file")
+                const objURI = await URL.createObjectURL(await res.blob())
+                const nextType = dataType(fileName)[0];
+
+                refleshPreview(lastType, nextType);
+
+                switch (nextType) {
+                    case "image":
+                        document.querySelector("#title").textContent = fileName
+                        const img = document.querySelector("#img_frame")
+                        img.setAttribute('src', objURI)
+                    case "audio":
+                        document.querySelector("#title").textContent = fileName
+                        const audio = document.querySelector("#audio_frame")
+                        audio.setAttribute('src', objURI)
+                        audio.play();
+                    default:
+                        break;
+                }
+
+            }
+        })();
+    </script>
+</body>
+
+</html>
+`
