@@ -2,12 +2,15 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"mime/multipart"
+	"net"
 	"net/http"
 	"net/url"
+	"path/filepath"
 )
 
 type RequestHandler struct {
@@ -24,19 +27,40 @@ type HTTPResponseFormat struct {
 	Status string
 }
 
-func NewRequestHandler(addr string) *RequestHandler {
-	return &RequestHandler{new(http.Client), addr}
+const (
+	SockTypeTCP = iota
+	SockTypeUNIX
+)
+
+func NewRequestHandler(addr string, sockType int) *RequestHandler {
+
+	var client *http.Client
+	switch sockType {
+	case SockTypeUNIX:
+		client = &http.Client{
+			Transport: &http.Transport{
+				DialContext: func(_ context.Context, _, _ string) (net.Conn, error) {
+					return net.Dial("unix", filepath.Join(addr, "http.sock"))
+				},
+			},
+		}
+		addr = "unix:" + addr
+	case SockTypeTCP:
+		client = new(http.Client)
+	}
+
+	return &RequestHandler{client, "http://" + addr}
 }
 
 func (r RequestHandler) ChromeShow() (err error) {
-	_, err = http.Get(r.localAdd + "/chromeshow")
+	_, err = r.client.Get(r.localAdd + "/chromeshow")
 
 	return
 
 }
 
 func (r RequestHandler) ChromeOff() (err error) {
-	_, err = http.Get(r.localAdd + "/chromeoff")
+	_, err = r.client.Get(r.localAdd + "/chromeoff")
 	return
 }
 
@@ -54,7 +78,7 @@ func (r *RequestHandler) Send(data HTTPPreviewData) (err error) {
 
 	mw.Close()
 
-	resp, err := http.Post(r.localAdd+"/remote", contentType, body)
+	resp, err := r.client.Post(r.localAdd+"/remote", contentType, body)
 	if err != nil {
 		return
 	}
