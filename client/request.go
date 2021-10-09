@@ -44,7 +44,7 @@ func NewRequestHandler(addr string, sockType int) *RequestHandler {
 				},
 			},
 		}
-		addr = "unix:" + addr
+		addr = "."
 	case SockTypeTCP:
 		client = new(http.Client)
 	}
