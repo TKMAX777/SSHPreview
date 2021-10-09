@@ -1,4 +1,4 @@
-package main
+package client
 
 import (
 	"bufio"
@@ -22,7 +22,7 @@ func init() {
 	}
 }
 
-func main() {
+func Start() {
 
 	flag.Parse()
 	var args = flag.Args()
