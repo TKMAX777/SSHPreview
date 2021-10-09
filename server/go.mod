@@ -1,4 +1,4 @@
-module github.com/TKMAX777/ssh_preview/server
+module github.com/TKMAX777/SSHPreview/server
 
 go 1.16
 

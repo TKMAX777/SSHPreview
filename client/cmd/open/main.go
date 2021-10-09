@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/TKMAX777/ssh_preview/client"
+	"github.com/TKMAX777/SSHPreview/client"
 )
 
 func main() {

@@ -8,27 +8,37 @@
 - [SSH Preview (Client)](#ssh-preview-client)
     - [概要](#概要)
     - [目次](#目次)
+    - [Install](#install)
     - [設定方法](#設定方法)
+        - [UnixDomainSocketを使う場合](#unixdomainsocketを使う場合)
+        - [ポート転送を用いる場合](#ポート転送を用いる場合)
+    - [利用方法](#利用方法)
 
 <!-- /TOC -->
 
-## 設定方法
-1. ビルドします。
+## Install
 
 ```sh
-go build
+go install github.com/TKMAX777/SSHPreview/client/cmd/open@latest
 ```
 
-2. 接続元で指定した、接続先の転送ポートを次のように環境変数で指定します。
+## 設定方法
+### UnixDomainSocketを使う場合
+接続元で指定したsocketディレクトリを次のように指定します。
+
+```sh
+export PreviewListenSock=/path/to/dir
+```
+
+### ポート転送を用いる場合
+接続元で指定した、接続先の転送ポートを次のように環境変数で指定します。
 
 ```sh
 export PreviewListenPort=ポート番号
 ```
 
-3. あとは適当なプログラム名(デフォルトでは`client`)でPATHを通します。
-
-4. 接続元の設定が終わっていれば、次でプレビューが表示されます。
+## 利用方法
 
 ```sh
-client ファイルパス
+open /path/to/pictures
 ```
