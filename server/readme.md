@@ -20,6 +20,7 @@
 ```sh
 git clone github.com/TKMAX777/SSHPreview
 cd SSHPreview/server
+go build
 ```
 
 
