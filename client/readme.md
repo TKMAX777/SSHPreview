@@ -27,8 +27,13 @@ go install github.com/TKMAX777/SSHPreview/client/cmd/open@latest
 接続元で指定したsocketディレクトリを次のように指定します。
 
 ```sh
-export PreviewListenSock=/path/to/dir
+export PreviewListenSock=/path/to/socket/dir
 ```
+
+SSH接続時に前回のソケットを消す必要があるため、次のようにソケットファイルを接続時に消す設定を追記します。
+
+```sh
+echo rm /path/to/socket/dir/http.socket
 
 ### ポート転送を用いる場合
 接続元で指定した、接続先の転送ポートを次のように環境変数で指定します。
