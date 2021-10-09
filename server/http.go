@@ -18,6 +18,10 @@ func NewHTTPHandler() *HTTPHandler {
 
 	http.Handle("/", http.FileServer(http.Dir("resources")))
 
+	http.HandleFunc("/ping",
+		func(w http.ResponseWriter, _ *http.Request) { w.Write([]byte("OK")) },
+	)
+
 	http.Handle("/remote", remoteRequests)
 	http.HandleFunc("/verify", remoteRequests.VerifyName)
 

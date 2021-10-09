@@ -23,7 +23,6 @@ func init() {
 }
 
 func Start() {
-
 	flag.Parse()
 	var args = flag.Args()
 

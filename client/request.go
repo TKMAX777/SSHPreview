@@ -105,3 +105,8 @@ func (r *RequestHandler) Verify(fileName string) (err error) {
 	}
 	return
 }
+
+func (r *RequestHandler) Ping() (err error) {
+	_, err = r.client.Get(r.localAdd + "/ping")
+	return err
+}
