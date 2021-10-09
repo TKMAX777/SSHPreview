@@ -37,10 +37,11 @@ func NewRequestHandler(addr string, sockType int) *RequestHandler {
 	var client *http.Client
 	switch sockType {
 	case SockTypeUNIX:
+		var sock = filepath.Join(addr, "http.sock")
 		client = &http.Client{
 			Transport: &http.Transport{
 				DialContext: func(_ context.Context, _, _ string) (net.Conn, error) {
-					return net.Dial("unix", filepath.Join(addr, "http.sock"))
+					return net.Dial("unix", sock)
 				},
 			},
 		}
