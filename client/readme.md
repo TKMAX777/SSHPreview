@@ -23,7 +23,7 @@ go install github.com/TKMAX777/SSHPreview/client/cmd/open@latest
 ```
 
 ## 設定方法
-### UnixDomainSocketを使う場合
+### UnixDomainSocketを使う場合(要sudo)
 接続元で指定したsocketディレクトリを次のように指定します。
 
 ```sh
@@ -33,7 +33,7 @@ export PreviewListenSock=/path/to/socket/dir
 SSH接続時に前回のソケットを消す必要があるため、次のようにソケットファイルを接続時に消す設定を追記します。
 
 ```sh
-echo rm /path/to/socket/dir/http.socket
+sudo sh -c 'echo "StreamLocalBindUnlink yes" >> /etc/ssh/sshd_config'.
 ```
 
 ### ポート転送を用いる場合
