@@ -1,5 +1,6 @@
-package main
+package client
 
 var Settings struct {
 	ListenPort string
+	ListenSock string
 }

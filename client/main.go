@@ -1,4 +1,4 @@
-package main
+package client
 
 import (
 	"bufio"
@@ -13,15 +13,26 @@ import (
 )
 
 func init() {
-	Settings.ListenPort = os.Getenv("PreviewListenPort")
+	Settings.ListenSock = os.Getenv("PreviewListenSock")
+	if Settings.ListenSock == "" {
+		Settings.ListenPort = os.Getenv("PreviewListenPort")
+		if Settings.ListenPort == "" {
+			panic("both of ListenPort and LitenSock not specified")
+		}
+	}
 }
 
-func main() {
+func Start() {
 
 	flag.Parse()
 	var args = flag.Args()
 
-	var req = NewRequestHandler("http://localhost:" + Settings.ListenPort)
+	var req *RequestHandler
+	if Settings.ListenSock == "" {
+		req = NewRequestHandler("localhost:"+Settings.ListenPort, SockTypeTCP)
+	} else {
+		req = NewRequestHandler(Settings.ListenSock, SockTypeUNIX)
+	}
 
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
