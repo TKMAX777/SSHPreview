@@ -40,10 +40,10 @@ SSH時にポートをソケットに転送するように設定します。
 # ~/.ssh/config
 Host 設定したいホスト
 HostName 設定したいホストアドレス
-RemoteForward /path/to/socket_dir/http.sock 127.0.0.1:先程のポート番号
+RemoteForward /path/to/socket/dir/http.sock 127.0.0.1:先程のポート番号
 ```
 
-`/path/to/socket_dir` には、接続先の適当なディレクトリを指定してください。
+`/path/to/socket/dir` には、接続先の適当なディレクトリを指定してください。
 
 この後、常態化してください。
 
