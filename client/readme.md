@@ -33,7 +33,7 @@ export PreviewListenSock=/path/to/socket/dir
 ```
 
 
-#### Sudu権限がある場合
+#### Sudo権限がある場合
 SSH接続時に、前回の接続ソケットを上書きするため、次の設定をsshdにする必要があります。
 
 ```sh
