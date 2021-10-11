@@ -18,3 +18,21 @@
 1. [接続元の設定](server)
 
 2. [接続先の設定](client)
+
+## うまく行かない場合
+### go installしたけどコマンドが見つからない
+
+GOBINにパスが通っている必要があります。
+
+- GOBINを設定していない場合
+
+```sh
+export PATH=`go env GOPATH`/bin:$PATH
+
+```
+
+- GOBINを設定している場合
+
+```sh
+export PATH=`go env GOBIN`:$PATH
+```
