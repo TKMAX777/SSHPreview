@@ -18,7 +18,7 @@
 ## Install
 
 ```sh
-git clone github.com/TKMAX777/SSHPreview
+git@github.com:TKMAX777/SSHPreview.git
 cd SSHPreview/server
 go build
 ```
