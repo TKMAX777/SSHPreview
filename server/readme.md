@@ -74,5 +74,19 @@ RemoteForward :転送先のポート 127.0.0.1:先程のポート番号
 
 この後、常態化してください。
 
+## <参考> 常態化方法について
 
+### Windows
+
+タスクスケジューラを用いると簡単にこれを行うことができます。
+
+1. バイナリファイルと同じディレクトリに次のVBSファイルを作成します。
+
+```vbs
+CreateObject("WScript.Shell").Run "C:\path\to\SSHPreview\server\server.exe", 0
+```
+
+2. タスクスケジューラで適当な新たなタスクの作成をし、起動時に実行するようにします。
+
+3. 実行時の開始(オプション)に、 `C:\path\to\SSHPreview\server` と記述します。
 
