@@ -41,6 +41,7 @@ SSH時にポートをソケットに転送するように設定します。
 Host 設定したいホスト
 HostName 設定したいホストアドレス
 RemoteForward /path/to/socket/dir/http.sock 127.0.0.1:先程のポート番号
+StreamLocalBindUnlink yes
 ```
 
 `/path/to/socket/dir` には、接続先の適当なディレクトリを指定してください。
