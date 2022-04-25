@@ -90,3 +90,45 @@ CreateObject("WScript.Shell").Run "C:\path\to\SSHPreview\server\server.exe", 0
 
 3. 実行時の開始(オプション)に、 `C:\path\to\SSHPreview\server` と記述します。
 
+### macOS
+
+1. 次の設定ファイルを `/Library/LaunchAgents/ssh_preview.service.plist` に保存します。
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>ssh_preview.service.plist</string>
+ 
+  <key>ProgramArguments</key>
+  <array>
+    <string>/path/to/ssh_preview/server/server</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>/path/to/ssh_preview/server</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PreviewListenPort</key>
+    <string> PORT_NUMBER_LIKE_8000 </string>
+  </dict>
+
+  <key>RunAtLoad</key>
+  <true/>
+  
+  <key>UserName</key>
+  <string>USER_NAME</string>
+
+</dict>
+</plist>
+```
+
+2. 登録する
+
+```sh
+$ launchctl load /Library/LaunchAgents/ssh_preview.service.plist
+```
+
