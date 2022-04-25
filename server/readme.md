@@ -11,7 +11,11 @@
     - [Install](#install)
     - [設定方法](#設定方法)
         - [Unix Domain Socketを用いる場合](#unix-domain-socketを用いる場合)
+            - [Hint](#hint)
         - [ポート転送を行う場合](#ポート転送を行う場合)
+    - [<参考> 常態化方法について](#参考-常態化方法について)
+        - [Windows](#windows)
+        - [macOS](#macos)
 
 <!-- /TOC -->
 
@@ -82,20 +86,22 @@ RemoteForward :転送先のポート 127.0.0.1:先程のポート番号
 
 1. バイナリファイルと同じディレクトリに次のVBSファイルを作成します。
 
-```vbs
+```vb
 'start.vbs
 CreateObject("WScript.Shell").Run "C:\path\to\SSHPreview\server\server.exe", 0
 ```
 
-2. タスクスケジューラで適当な新たなタスクの作成をし、起動時に実行するようにします。
-3. 開始するプログラムとして、先程作成した `start.vbs` を指定します。
-4. 実行時の開始(オプション)に、 `C:\path\to\SSHPreview\server` と記述します。
+2. タスクスケジューラで適当な名前で新たなタスクの作成をします。
+3. トリガーをログオン時に設定します。
+4. 操作にプログラムの開始を指定します。
+5. 開始するプログラムとして、先程作成した `start.vbs` を指定します。
+6. 実行時の `開始(オプション)` に、 `C:\path\to\SSHPreview\server` と記述します。
 
 ### macOS
 
 1. 次の設定ファイルを `/Library/LaunchAgents/ssh_preview.service.plist` に保存します。
 
-```
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
