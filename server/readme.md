@@ -61,7 +61,7 @@ chmod 700 /path/to/socket/dir
 ```
 
 #### 備考
-Unix Domain Socket用いた転送をするためには、GitBashが必要です。
+WindowsでUnix Domain Socket用いた転送をするためには、GitBashが必要です。
 
 ### ポート転送を行う場合
 接続元の任意のリッスンポートを次のように環境変数で指定します。
