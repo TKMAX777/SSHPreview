@@ -5,7 +5,7 @@ builds:
   - 
     id: "Server"
     main: ./server
-    binary: server
+    binary: server/server
     env:
       - CGO_ENABLED=0
     goos:
