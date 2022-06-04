@@ -39,7 +39,7 @@ archives:
         format: zip
     files: 
       - server/resources/**/*
-      - index.html
+      - server/index.html
   - 
     id: "ClientArchive"
     builds:
