@@ -72,8 +72,11 @@ release:
   mode: append
 
   header: |
-    ## Update ({{ .Date }})
+      ## Update ({{ .Date }})
   footer: |
     Those were the changes on {{ .Tag }}!
+    ## About Archive Name
+    The Server_* file is a program placed on the SSH source machine, and the Client_* file is a program placed on the SSH destination machine.
+
   name_template: "{{.ProjectName}}-v{{.Version}}"
   
