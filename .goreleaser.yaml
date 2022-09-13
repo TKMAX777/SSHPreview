@@ -40,6 +40,7 @@ archives:
     files: 
       - server/resources/**/*
       - server/index.html
+      - serverModLicenes/**/*
   - 
     id: "ClientArchive"
     builds:
@@ -54,6 +55,8 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+    files: 
+      - clientModLicenes/**/*
 checksum:
   name_template: 'checksums.txt'
 snapshot:
